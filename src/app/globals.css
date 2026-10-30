@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0b0b0e;
+  --color-ink-2: #101016;
+  --color-ink-3: #16161d;
+  --color-line: rgba(240, 236, 224, 0.1);
+  --color-paper: #f0ece0;
+  --color-mist: rgba(240, 236, 224, 0.56);
+  --color-faint: rgba(240, 236, 224, 0.34);
+  --color-volt: #d8ff3e;
+  --color-volt-deep: #9dc421;
+  --color-ember: #ff9e5e;
+  --color-sky: #8ed0ff;
+
+  --font-serif: var(--ff-fraunces), "Georgia", serif;
+  --font-sans: var(--ff-grotesk), "Inter", system-ui, sans-serif;
+  --font-mono: var(--ff-jetmono), "SFMono-Regular", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-volt);
+  color: #0b0b0e;
+}
+
+/* ---------- scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0b0e;
+}
+::-webkit-scrollbar-thumb {
+  background: #26262e;
+  border-radius: 8px;
+  border: 2px solid #0b0b0e;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a44;
+}
+
+/* ---------- grain overlay ---------- */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 70;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 9s steps(6) infinite;
+}
+
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -5%); }
+  60% { transform: translate(-3%, -3%); }
+  80% { transform: translate(4%, 4%); }
+}
+
+/* ---------- utility text ---------- */
+.font-serif-d {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 100;
+}
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ---------- marquee ---------- */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee-x 28s linear infinite;
+}
+
+/* ---------- pulse dot ---------- */
+@keyframes ping-soft {
+  0% { transform: scale(1); opacity: 0.8; }
+  80%, 100% { transform: scale(2.4); opacity: 0; }
+}
+.animate-ping-soft {
+  animation: ping-soft 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ---------- row hover sweep ---------- */
+.sweep {
+  position: relative;
+  isolation: isolate;
+}
+.sweep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(216, 255, 62, 0.08), rgba(216, 255, 62, 0.02) 60%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sweep:hover::before {
+  transform: scaleX(1);
+}
+
+/* ---------- checkbox ---------- */
+.chk {
+  appearance: none;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 236, 224, 0.3);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+  flex: none;
+}
+.chk:hover {
+  border-color: var(--color-volt);
+  transform: scale(1.06);
+}
+.chk:active {
+  transform: scale(0.94);
+}
+.chk::after {
+  content: "";
+  width: 0.45rem;
+  height: 0.75rem;
+  border-right: 2px solid #0b0b0e;
+  border-bottom: 2px solid #0b0b0e;
+  transform: rotate(42deg) scale(0);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin-top: -2px;
+}
+.chk:checked {
+  background: var(--color-volt);
+  border-color: var(--color-volt);
+}
+.chk:checked::after {
+  transform: rotate(42deg) scale(1);
+}
+.chk:focus-visible {
+  outline: 2px solid var(--color-volt);
+  outline-offset: 3px;
+}
+.chk:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-volt);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- glow orbs ---------- */
+.orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+/* ---------- thin rule ---------- */
+.hairline {
+  border-color: var(--color-line);
+}
