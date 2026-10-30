@@ -1,11 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres";
+import { getConnectionString } from "@netlify/database";
 import { Pool } from "pg";
 
-const databaseUrl = process.env.DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required");
-}
+// Prefer an explicit DATABASE_URL (local Postgres), otherwise use Netlify Database.
+const databaseUrl = process.env.DATABASE_URL || getConnectionString();
 
 const globalForDb = globalThis as typeof globalThis & {
   __arenaNextJsPostgresqlPool?: Pool;
